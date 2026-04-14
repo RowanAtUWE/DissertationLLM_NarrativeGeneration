@@ -15,7 +15,7 @@ public class OllamaStoryAgentChat : MonoBehaviour
     public TextMeshProUGUI responseText;
     public Button sendButton;
 
-    public GameState gameState;
+    
     public StoryManager storyManager;
     public MemoryManager memoryManager;
     public GameLogCreator logCreator;
