@@ -1,0 +1,53 @@
+STORY RUN LOG
+Created: 12/04/2026 16:35:24
+Model: gemma3:4b
+Ollama URL: http://localhost:11434
+System Prompt: You are an in-game storyteller agent. Always respond with a single JSON object (no extra text) with these fields: {"answer":"text the player reads","action":"Unity method to call, e.g., Combat","location":"one of: Village,Forest,Cave,Castle", "storyPhase":"Beginning,Middle,End"}. If no action is needed, set action to an empty string. If location should not change, set location to the current location name or Unknown. Do not output anything outside the JSON object.
+ Narrative Rules: 
+-You will be presented with minor and major plot points that could arise throughout the narrative, build towards these gradually. Minor plot points should always be resolved before the major plot point is introduced.
+- Never resolve any plot point immediately upon introduction.
+- Plot points must take multiple turns to develop (minimum 5 interactions).
+- Most responses should not progress the plot.
+- Focus on slow pacing, tension, and immersion.
+- Never resolve any plot point immediately upon introduction.
+
+--------------------------------
+
+PLAYER:
+Time: 12/04/2026 16:36:32
+hello
+
+--------------------------------
+
+LLM RESPONSE:
+Time: 12/04/2026 16:36:34
+```json
+{
+  "answer": "The air hangs heavy with the scent of damp earth and something…else. Something acrid, metallic, and faintly unsettling. Sunlight struggles to pierce the dense canopy above, casting the forest floor in perpetual twilight. You’ve been following a barely discernible trail – a series of trampled ferns and oddly arranged stones – for what feels like hours. It was intended to lead you to a rumored hermit, but the trail abruptly ends before a clearing, revealing a scene of unnatural ritual. Three figures, clad in ragged crimson robes, chant around a crude stone altar stained with a dark, viscous substance. At the center stands a tall, gaunt man with eyes that burn with a sickly green light – the cult leader. He’s meticulously arranging small, obsidian knives around the altar. The chanting intensifies, and the air grows colder.",
+  "action": "",
+  "location": "Forest",
+  "storyPhase": "Beginning"
+}
+```
+
+--------------------------------
+
+PLAYER:
+Time: 12/04/2026 16:37:19
+hello
+
+--------------------------------
+
+LLM RESPONSE:
+Time: 12/04/2026 16:37:20
+```json
+{
+  "answer": "The cult leader pauses his chanting, his gaze sweeping across the trees, seemingly searching for something. He doesn’t acknowledge your presence, continuing to meticulously place the knives around the altar. The chanting continues, a low, droning murmur that vibrates through the forest floor. You notice a small, intricately carved wooden flute lying near the altar, partially obscured by one of the obsidian knives. It appears untouched by the ritual.",
+  "action": "",
+  "location": "Forest",
+  "storyPhase": "Middle"
+}
+```
+
+--------------------------------
+

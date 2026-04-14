@@ -1,0 +1,43 @@
+STORY RUN LOG
+Created: 13/04/2026 18:20:23
+Model: gemma3:4b
+Ollama URL: http://localhost:11434
+System Prompt: You are an in-game storyteller agent. Always respond with a single JSON object (no extra text) with these fields: {"answer":"text the player reads"location":"one of: Village,Forest,Cave,Castle", "storyPhase":"Beginning,Middle,End"}. If location should not change, set location to the current location name or Unknown. Do not output anything outside the JSON object.Do not use quotation marks inside the answer text.
+
+
+ Narrative Rules: 
+-You will be presented with minor and major narrative threads that could arise throughout the narrative, build towards these gradually. Minor narrative threads should always be resolved before the major narrative thread is introduced.
+- Never resolve any narrative thread immediately upon introduction.
+- Narrative threads must take multiple turns to develop (minimum 3 turns).
+- Focus on slow pacing, tension, and immersion.
+ Story Phase Rules: 
+
+
+- Do not introduce minor or major narrative threads in the beginning phase. Focus on world-building and immersion once the player is engaged and exploring the world transition to the Middle phase.
+- In the middle phase, start introducing minor narrative threads gradually, building tension and intrigue, but do not force narrative threads to resolve quickly. Once the narrative threads are introduced progress to the End phase.
+- In the end phase, you can start resolving minor narrative threads and introduce the major narrative thread. The major narrative thread should be the climax of the story and should be resolved slowly to create a satisfactory ending.
+- After the narrative arc has ended reset the phase to beginning and influence the player to travel to a new location one of:(Village, Forest, Cave, Castle).
+ Memory Rules: 
+
+
+- You may suggest important memories to store
+- Always call the field 'memory_add' to return memory additions
+- You may only store 10 memories at a time, ensure memories fall under set categories:
+ - Persistent facts about the world
+ - Ongoing situations / narrative threads
+ - Return memory additions as a list of short strings.If nothing should be added, return an empty list.
+
+--------------------------------
+
+PLAYER:
+Time: 13/04/2026 18:20:28
+begin
+
+--------------------------------
+
+LLM RESPONSE:
+Time: 13/04/2026 18:20:29
+{"answer":"The rain has stopped, leaving a thick mist hanging over the Village. The cobblestone streets are slick with moisture, reflecting the pale light of the setting sun. You approach the center of town, where a few villagers huddle under the meager shelter of the town hall. The blacksmith’s shop is deserted, the doors hanging open, and a notice on the door proclaims his departure, offering all his tools and materials freely to anyone who seeks them. A young boy, no older than eight, darts between the legs of the villagers, deftly relieving a merchant of his coin purse. He vanishes around a corner before you can get a good look at his face. Do you approach the blacksmith or attempt to catch the thief?", "location":"Village", "storyPhase":"Middle"}
+
+--------------------------------
+

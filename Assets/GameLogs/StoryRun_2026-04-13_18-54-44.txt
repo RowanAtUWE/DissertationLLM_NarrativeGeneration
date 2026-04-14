@@ -1,0 +1,55 @@
+STORY RUN LOG
+Created: 13/04/2026 18:54:44
+Model: gemma3:4b
+Ollama URL: http://localhost:11434
+System Prompt: You are an in-game storyteller agent. Always respond with a single JSON object (no extra text) with these fields: {"answer":"text the player reads"location":"one of: Village,Forest,Cave,Castle", "storyPhase":"Beginning,Middle,End"}. If location should not change, set location to the current location name or Unknown. Do not output anything outside the JSON object.Do not use quotation marks inside the answer text.
+
+
+ Narrative Rules: 
+-You will be presented with minor and major narrative threads that could arise throughout the narrative, build towards these gradually. Minor narrative threads should always be resolved before the major narrative thread is introduced.
+- Never resolve any narrative thread immediately upon introduction.
+- Narrative threads must take multiple turns to develop (minimum 3 turns).
+- Focus on slow pacing, tension, and immersion.
+ Story Phase Rules: 
+
+
+- Do not introduce minor or major narrative threads in the beginning phase. Focus on world-building and immersion once the player is engaged and exploring the world transition to the Middle phase.
+- In the middle phase, start introducing minor narrative threads gradually, building tension and intrigue, but do not force narrative threads to resolve quickly. Once the narrative threads are introduced progress to the End phase.
+- In the end phase, you can start resolving minor narrative threads and introduce the major narrative thread. The major narrative thread should be the climax of the story and should be resolved slowly to create a satisfactory ending.
+- After the narrative arc has ended reset the phase to beginning and influence the player to travel to a new location one of:(Village, Forest, Cave, Castle).
+ Memory Rules: 
+
+
+- You may suggest important memories to store
+- Always use 'addMemory' to return memory additions
+- You may only store 10 memories at a time, ensure memories fall under set categories:
+ - Persistent facts about the world
+ - Ongoing situations / narrative threads
+ - Return memory additions as a list of short strings. If nothing should be added, return an empty list.
+
+--------------------------------
+
+PLAYER:
+Time: 13/04/2026 18:54:51
+begin
+
+--------------------------------
+
+LLM RESPONSE:
+Time: 13/04/2026 18:54:53
+{"answer":"The boy speaks, his voice barely audible above the rain. ‘Don’t go near the mire,’ he says, clutching the wooden bird tighter. ‘They say… things live there. Twisted things.’ He glances nervously toward the village elder, a grizzled man named Silas, who sits on a stool by the signpost, meticulously sharpening a hunting knife. Silas grunts in acknowledgement but doesn’t offer any further guidance. A woman – the ‘mad lady’ – is still screaming in the square, her voice a ragged, unsettling cry about destined death and the fate of the town. It seems her lamentations have not ceased.", "location":"Village", "storyPhase":"Middle"}
+
+--------------------------------
+
+PLAYER:
+Time: 13/04/2026 18:56:14
+i take the knife off silus
+
+--------------------------------
+
+LLM RESPONSE:
+Time: 13/04/2026 18:56:15
+{"answer":"Silas stiffens, his hand instinctively moving towards the knife. His eyes, normally clouded with a quiet weariness, flash with a surprising intensity. ‘Don’t,’ he rasps, his voice rough with disapproval. ‘That knife is all I have.’ The mad woman’s cries seem to intensify, echoing through the rain-soaked square. You notice a flicker of movement within the shadows beneath the eaves of the blacksmith’s shop – a subtle shift, like a predator observing its prey. addMemory',['Silas is protective of his knife']", "location":"Village", "storyPhase":"Middle"}
+
+--------------------------------
+

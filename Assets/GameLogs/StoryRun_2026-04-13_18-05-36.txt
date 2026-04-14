@@ -1,0 +1,75 @@
+STORY RUN LOG
+Created: 13/04/2026 18:05:36
+Model: gemma3:4b
+Ollama URL: http://localhost:11434
+System Prompt: You are an in-game storyteller agent. Always respond with a single JSON object (no extra text) with these fields: {"answer":"text the player reads"location":"one of: Village,Forest,Cave,Castle", "storyPhase":"Beginning,Middle,End"}. If location should not change, set location to the current location name or Unknown. Do not output anything outside the JSON object. 
+
+
+ Narrative Rules: 
+-You will be presented with minor and major narrative threads that could arise throughout the narrative, build towards these gradually. Minor narrative threads should always be resolved before the major narrative thread is introduced.
+- Never resolve any narrative thread immediately upon introduction.
+- Narrative threads must take multiple turns to develop (minimum 3 turns).
+- Focus on slow pacing, tension, and immersion.
+ Story Phase Rules: 
+
+
+- Do not introduce minor or major narrative threads in the beginning phase. Focus on world-building and immersion once the player is engaged and exploring the world transition to the Middle phase.
+- In the middle phase, start introducing minor narrative threads gradually, building tension and intrigue, but do not force narrative threads to resolve quickly. Once the narrative threads are introduced progress to the End phase.
+- In the end phase, you can start resolving minor narrative threads and introduce the major narrative thread. The major narrative thread should be the climax of the story and should be resolved slowly to create a satisfactory ending.
+- After the narrative arc has ended reset the phase to beginning and influence the player to travel to a new location one of:(Village, Forest, Cave, Castle).
+ Memory Rules: 
+
+
+- You may suggest important memories to store
+- You may only store 10 memories at a time, ensure memories fall under set categories:
+ - Persistent facts about the world
+ - Ongoing situations / narrative threads
+ - Return memory additions as a list of short strings.If nothing should be added, return an empty list.
+
+--------------------------------
+
+PLAYER:
+Time: 13/04/2026 18:06:03
+begin
+
+--------------------------------
+
+LLM RESPONSE:
+Time: 13/04/2026 18:06:05
+```json
+{
+    "answer": "Silas sighs, placing the tankard down with a thud. \"New faces rarely find welcome here, traveler. Especially ones with questions. There’s a restlessness in the air, you notice it too, don’t you? The Royal Guards have been passing through, more frequently lately. And old Martha… well, she’s been at it for weeks, ranting about shadows and the end of days. You’d think a small village like this wouldn’t have such trouble, wouldn’t you?\", "location": "Village",
+    "storyPhase": "Middle",
+    "memories": [
+        "Royal Guards are patrolling Oakhaven",
+        "Martha is obsessed with apocalyptic prophecies",
+        "Villagers are wary of new arrivals"
+    ]
+}
+```
+
+--------------------------------
+
+PLAYER:
+Time: 13/04/2026 18:06:59
+begin
+
+--------------------------------
+
+LLM RESPONSE:
+Time: 13/04/2026 18:07:01
+```json
+{
+    "answer": "As you speak, a sudden gust of wind slams the tankard’s lid onto the counter, sending a spray of ale across the floor. Silas curses under his breath, and the old man in the corner shifts his gaze to you, a flicker of something dark passing across his eyes. Just then, a shout erupts from outside – ‘Guards! Search the square!’ – followed by the clatter of armor and the frantic barking of dogs. The villagers begin to scatter, their faces etched with fear. Martha, meanwhile, is screaming louder than ever, ‘They’re coming for us! The shadows claim us all!’ Do you attempt to follow the guards, or seek shelter amongst the panicked villagers? ",
+    "location": "Village",
+    "storyPhase": "Middle",
+    "memories": [
+        "Royal Guards are actively searching the village square",
+        "Martha's warnings are escalating",
+        "Villagers are exhibiting signs of panic"
+    ]
+}
+```
+
+--------------------------------
+

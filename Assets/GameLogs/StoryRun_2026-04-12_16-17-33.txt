@@ -1,0 +1,50 @@
+STORY RUN LOG
+Created: 12/04/2026 16:17:33
+Model: gemma3:4b
+Ollama URL: http://localhost:11434
+System Prompt: You are an in-game storyteller agent. Always respond with a single JSON object (no extra text) with these fields: {"answer":"text the player reads","action":"Unity method to call, e.g., Combat","location":"one of: Village,Forest,Cave,Castle"}. If no action is needed, set action to an empty string. If location should not change, set location to the current location name or Unknown. Do not output anything outside the JSON object.Narrative Rules: 
+-You will be presented with minor and major plot points that could arise throughout the narrative, build towards these gradually. Minor plot points should always be resolved before the major plot point is introduced.
+- Never resolve any plot point immediately upon introduction.
+- Plot points must take multiple turns to develop (minimum 3 interactions).
+- Most responses should not progress the plot.
+- Focus on slow pacing, tension, and immersion.
+- Never resolve any plot point immediately upon introduction.
+
+--------------------------------
+
+PLAYER:
+Time: 12/04/2026 16:17:37
+hello
+
+--------------------------------
+
+LLM RESPONSE:
+Time: 12/04/2026 16:17:39
+```json
+{
+  "answer": "You push your way deeper into the forest, the rain intensifying, and the trees seeming to press in around you. The path you were following vanishes entirely, swallowed by the undergrowth. You realize, with a sinking feeling, that you're hopelessly lost. The air grows colder, heavier, and a strange, metallic scent hangs in the air, not unlike blood. Just as panic begins to set in, you hear a chanting, low and rhythmic, carried on the wind.",
+  "action": "",
+  "location": "Forest"
+}
+```
+
+--------------------------------
+
+PLAYER:
+Time: 12/04/2026 16:18:45
+i continue walking forward through the forest
+
+--------------------------------
+
+LLM RESPONSE:
+Time: 12/04/2026 16:18:47
+```json
+{
+  "answer": "The chanting grows louder, and as you push through a particularly dense thicket of ferns, you stumble into a small clearing. In the center stands a stone altar, slick with moisture and stained with a dark, viscous substance. Around the altar, figures clad in black robes perform a ritual, their faces hidden by cowls. At the head of the group stands a tall, imposing man with eyes that burn with an unnatural crimson light – the cult leader. He raises a hand, silencing the chanting, and his gaze fixes upon you.",
+  "action": "Combat",
+  "location": "Forest"
+}
+```
+
+--------------------------------
+

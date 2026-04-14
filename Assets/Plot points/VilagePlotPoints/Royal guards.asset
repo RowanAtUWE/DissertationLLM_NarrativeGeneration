@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4e9ef1074b404a4c82f148e0819ef38, type: 3}
+  m_Name: Royal guards
+  m_EditorClassIdentifier: Assembly-CSharp::PlotPoint
+  plotPointName: Royal guards
+  description: A battalion of royal guards march through the town, searching every
+    corner of the town for something unkown.
+  location: 00000000
+  phase: 000000000100000002000000
+  isMajorPlotPoint: 0
+  isUsed: 0
