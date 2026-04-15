@@ -19,7 +19,8 @@ public class OllamaStoryAgentChat : MonoBehaviour
     public StoryManager storyManager;
     public MemoryManager memoryManager;
     public GameLogCreator logCreator;
-    private int messageCount = 0;
+    public UIManager uiManager;
+    //private int messageCount = 0;
 
     // --- Ollama settings ---
     [Tooltip("Ollama base address, e.g. http://localhost:11434")]
@@ -41,8 +42,13 @@ public class OllamaStoryAgentChat : MonoBehaviour
     private readonly string systemPrompt =
         "You are an in-game storyteller agent. Always respond with a single JSON object (no extra text) with these fields: " +
         "{\"answer\":\"text the player reads\"location\":\"one of: Village,Forest,Cave,Castle\", \"addMemory\":\"}. " +
-        "If location should not change, set location to the current location name or Unknown. " +
+        "If location should not change, set location to the current location name. " +
         "Do not output anything outside the JSON object.Do not use quotation marks inside the answer text." + "\r\n\r\n" +
+        "\r\n Player message: " +
+        "\r\n- The player will choose from 3 actions." +
+        "\r\n- Do: - an action or task the player wants to carry out within the story." +
+        "\r\n- say: - a message the player wants to speak outloud." +
+        "\r\n- ask: - a question the player wants to ask the storyteller(you) e.g. what can i see right now?." +
         "\r\n Narrative Rules: " +
         "\r\n-You will be presented with minor and major narrative threads, build towards these gradually. Minor narrative threads should always be resolved before the major narrative thread is introduced." +
         "\r\n- Never resolve any narrative thread immediately upon introduction." +
@@ -242,10 +248,14 @@ public class OllamaStoryAgentChat : MonoBehaviour
 
             string storyphase = $"Current story phase: {storyManager.currentPhase}";
 
+            string playerAction = uiManager.actionButtonText.text;
+
+            string combinedPlayerMessage = $"{playerAction}" + $"{userMessage}";
+
             //Debug.Log($"Major prompt: {majorPlotPrompts}\nMinor names: {string.Join(", ", minorPlotNames)}\nMinor descriptions: {string.Join(" | ", minorPlotDesc)}");
 
             // Combine the player's message with a short instruction to respond with JSON:
-            string userPayload = $"{memoryManager.BuildMemoryPrompt()}\n{locationHint}\n{storyphase}\n{majorPlotPrompts}\n{minorPlotPrompts}\nPlayer: {userMessage}\nRespond now with the JSON object only.";
+            string userPayload = $"{memoryManager.BuildMemoryPrompt()}\n{locationHint}\n{storyphase}\n{majorPlotPrompts}\n{minorPlotPrompts}\nPlayer: {combinedPlayerMessage}\nRespond now with the JSON object only.";
 
             Debug.Log($"Sending user message to model:\n{userPayload}");
 
@@ -281,7 +291,10 @@ public class OllamaStoryAgentChat : MonoBehaviour
         {
             Debug.LogWarning("Could not extract JSON from model response. Showing raw text.");
             if (responseText != null) responseText.text = fullText;
-            return;
+            {
+                return;
+            }
+            
         }
 
         StoryResponse resp = null;
@@ -294,7 +307,10 @@ public class OllamaStoryAgentChat : MonoBehaviour
         {
             Debug.LogError($"JSON parse failed: {ex.Message}\nExtracted JSON: {json}");
             if (responseText != null) responseText.text = $"Malformed JSON: {ex.Message}";
-            return;
+            {
+                return;
+            }
+           
         }
 
         if (responseText != null) responseText.text = resp.answer ?? "";
