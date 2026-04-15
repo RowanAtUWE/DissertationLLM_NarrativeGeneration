@@ -17,6 +17,7 @@ public class StoryManager : MonoBehaviour
     public Phase currentPhase = Phase.Beginning;
 
     public bool isInNewLocation = false;
+    public int messageCount = 0;
 
     private int minorAmount = 2;
     private int majorAmount = 1;
@@ -121,6 +122,7 @@ public class StoryManager : MonoBehaviour
             currentLocation = newLocation;
             Debug.Log($"[STORY] Location changed to {currentLocation}");
 
+            messageCount = 0;
             isInNewLocation = true;
             currentPhase = Phase.Beginning;
 

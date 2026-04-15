@@ -10,7 +10,6 @@ public class MemoryManager : MonoBehaviour
 
     private int maxMemories = 10;
 
-
     public string BuildMemoryPrompt()
     {
         StringBuilder sb = new StringBuilder();

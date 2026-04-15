@@ -56,7 +56,7 @@ public class OllamaStoryAgentChat : MonoBehaviour
         "\r\n- In the end phase resolve any remaining narrative threads before urging the player to explore a new location." +
         "\r\n Memory Rules: "  +
         "\r\n- Always use 'addMemory' to return memory additions" +
-        "\r\n- Memories must be less than 50 characters long and concise." +
+        //"\r\n- Memories must be less than 50 characters long and concise." +
         "\r\n- You may only store 10 memories at a time, ensure memories fall under set categories:" +
         "\r\n - Important persistent facts about the world" +
         "\r\n - Ongoing situations / narrative threads" +
@@ -161,19 +161,19 @@ public class OllamaStoryAgentChat : MonoBehaviour
     {
         try
         {
-            messageCount++;
+            storyManager.messageCount++;
 
             int memoryCount = memoryManager.narrativeMemories.Count;
 
-            if (memoryCount >= 5 && storyManager.currentPhase == Phase.Beginning && messageCount >= 7)
+            if (memoryCount >= 5 && storyManager.currentPhase == Phase.Beginning && storyManager.messageCount >= 7)
             {
                 storyManager.SetStoryPhase(Phase.Middle);
             }
-            if (memoryCount >= 10 && storyManager.currentPhase == Phase.Middle && messageCount >= 15)
+            if (memoryCount >= 10 && storyManager.currentPhase == Phase.Middle && storyManager.messageCount >= 15)
             {
                 storyManager.SetStoryPhase(Phase.Climax);
             }
-            if (memoryCount >= 10 && storyManager.currentPhase == Phase.Climax && messageCount >= 20)
+            if (memoryCount >= 10 && storyManager.currentPhase == Phase.Climax && storyManager.messageCount >= 20)
             {
                 storyManager.SetStoryPhase(Phase.End);
             }
@@ -329,11 +329,15 @@ public class OllamaStoryAgentChat : MonoBehaviour
 
         if (resp.addMemory != null)
         {
-            foreach (var memory in resp.addMemory)
+            if (resp.addMemory.Count <= 3)
             {
-                Debug.Log($"Adding memory from model: {memory}");
-                memoryManager.AddMemory(memory);
+                foreach (var memory in resp.addMemory)
+                {
+                    Debug.Log($"Adding memory to narrativeMemories: {memory}");
+                    memoryManager.AddMemory(memory);
+                }
             }
+               
 
         }
     }
