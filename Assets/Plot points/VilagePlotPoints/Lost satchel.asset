@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Lost satchel
   m_EditorClassIdentifier: Assembly-CSharp::PlotPoint
   plotPointName: Lost satchel
-  description: The player find a brown satchel laying on the ground, the satchel
-    is full of dried herbs and flowers
+  description: The player finds a brown satchel laying on the ground, the satchel
+    is full of dried herbs and flowers.
   location: 00000000
   phase: 0000000001000000
   isMajorPlotPoint: 0

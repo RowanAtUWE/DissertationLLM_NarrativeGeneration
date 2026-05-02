@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Mad woman
   m_EditorClassIdentifier: Assembly-CSharp::PlotPoint
   plotPointName: Mad woman
-  description: The vilage mad lady is screaming about destinied death and the fate
+  description: The village mad lady is screaming about destinied death and the fate
     of the town.
   location: 00000000
   phase: 0000000001000000

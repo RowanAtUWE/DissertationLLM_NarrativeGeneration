@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Royal guards
   m_EditorClassIdentifier: Assembly-CSharp::PlotPoint
   plotPointName: Royal guards
-  description: A battalion of royal guards march through the town, searching every
-    corner of the town for something unkown.
+  description: A battalion of royal guards march through the village, searching every
+    corner of the village for something unknown.
   location: 00000000
   phase: 000000000100000002000000
   isMajorPlotPoint: 0

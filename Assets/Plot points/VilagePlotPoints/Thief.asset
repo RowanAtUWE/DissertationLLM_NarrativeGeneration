@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Thief
   m_EditorClassIdentifier: Assembly-CSharp::PlotPoint
   plotPointName: Thief
-  description: A young child is skulking through the vilage pickpocketing unaware
+  description: A young child is skulking through the village pickpocketing unaware
     victims.
   location: 00000000
   phase: 000000000100000002000000

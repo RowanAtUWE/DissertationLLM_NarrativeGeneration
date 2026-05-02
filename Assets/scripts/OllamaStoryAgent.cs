@@ -34,16 +34,16 @@ public class OllamaStoryAgentChat : MonoBehaviour
 
 
 
-    // Streaming / state
+  
     private bool isProcessing = false;
     private StringBuilder streamingBuffer = new StringBuilder();
 
-    // System prompt instructing JSON output
+    // System prompt
     private readonly string systemPrompt =
         "You are an in-game storyteller agent. Always respond with a single JSON object (no extra text) with these fields: " +
-        "{\"answer\":\"text the player reads\"location\":\"one of: Village,Forest,Cave,Castle\", \"addMemory\":\"}. " +
+        "{\"answer\":\"text the player reads\",\"location\":\"one of: Village,Forest,Cave,Castle\", \"addMemory\":\"}." +
         "If location should not change, set location to the current location name. " +
-        "Do not output anything outside the JSON object.Do not use quotation marks inside the answer text." + "\r\n\r\n" +
+        "Do not output anything outside the JSON object. Do not use quotation marks inside the answer text." + "\r\n\r\n" +
         "\r\n Player message: " +
         "\r\n- The player will choose from 3 actions." +
         "\r\n- Do: - an action or task the player wants to carry out within the story." +
@@ -53,13 +53,13 @@ public class OllamaStoryAgentChat : MonoBehaviour
         "\r\n-You will be presented with minor and major narrative threads, build towards these gradually. Minor narrative threads should always be resolved before the major narrative thread is introduced." +
         "\r\n- Never resolve any narrative thread immediately upon introduction." +
         "\r\n- Narrative threads must take multiple turns to develop (minimum 3 turns)." +
-        "\r\n- Focus on slow pacing, tension, and immersion." +
+        "\r\n- Focus on slow pacing, tension, and immersion." + 
         "\r\n Story Phase Rules: " +
         "\r\n- The first response should establish the setting and introduce the player to their current location." +
         "\r\n- Do not introduce minor or major narrative threads in the beginning phase. Focus on world-building and immersion." +
          "\r\n- In the middle phase, start introducing minor narrative threads gradually, building tension and intrigue, but do not force narrative threads to resolve quickly." +
          "\r\n- In the climax phase, start resolving minor narrative threads and introduce the major narrative thread. The major narrative thread should be the climax of the story and should be resolved slowly to create a satisfactory ending." +
-        "\r\n- In the end phase resolve any remaining narrative threads before urging the player to explore a new location." +
+        "\r\n- In the end phase resolve any remaining narrative threads before urging the player to explore a new location." + 
         "\r\n Memory Rules: "  +
         "\r\n- Always use 'addMemory' to return memory additions" +
         //"\r\n- Memories must be less than 50 characters long and concise." +
@@ -67,7 +67,8 @@ public class OllamaStoryAgentChat : MonoBehaviour
         "\r\n - Important persistent facts about the world" +
         "\r\n - Ongoing situations / narrative threads" +
         "\r\n - Return memory additions as a list of short strings. If nothing should be added, return an empty list.";
-
+       
+    //"location\":\"one of: Village,Forest,Cave,Castle\"
     // "\r\n- Do not introduce minor or major narrative threads in the beginning phase. Focus on world-building and immersion once the player is engaged and exploring the world transition to the Middle phase." +
     // "\r\n- In the middle phase, start introducing minor narrative threads gradually, building tension and intrigue, but do not force narrative threads to resolve quickly. Once the narrative threads are introduced progress to the End phase." +
     // "\r\n- In the end phase, you can start resolving minor narrative threads and introduce the major narrative thread. The major narrative thread should be the climax of the story and should be resolved slowly to create a satisfactory ending." +
@@ -153,7 +154,7 @@ public class OllamaStoryAgentChat : MonoBehaviour
 
         streamingBuffer.Clear();
 
-        logCreator?.LogPlayerMessage(user);
+        //logCreator?.LogPlayerMessage(user);
 
         await SendUserMessage(user);
 
@@ -187,6 +188,7 @@ public class OllamaStoryAgentChat : MonoBehaviour
             string locationHint = $"CurrentLocation: {storyManager.currentLocation}";
 
             PlotPoint firstMajor = null;
+
             if (storyManager.chosenMajorPlotPoints != null && storyManager.chosenMajorPlotPoints.Count > 0)
             {
                 firstMajor = storyManager.chosenMajorPlotPoints.FirstOrDefault();
@@ -255,11 +257,18 @@ public class OllamaStoryAgentChat : MonoBehaviour
             //Debug.Log($"Major prompt: {majorPlotPrompts}\nMinor names: {string.Join(", ", minorPlotNames)}\nMinor descriptions: {string.Join(" | ", minorPlotDesc)}");
 
             // Combine the player's message with a short instruction to respond with JSON:
-            string userPayload = $"{memoryManager.BuildMemoryPrompt()}\n{locationHint}\n{storyphase}\n{majorPlotPrompts}\n{minorPlotPrompts}\nPlayer: {combinedPlayerMessage}\nRespond now with the JSON object only.";
+            string userPayload = 
+                $"{memoryManager.BuildMemoryPrompt()}\n" +
+                $"{locationHint}\n" +
+                $"{storyphase}\n\n" +
+                $"{majorPlotPrompts}\n" +
+                $"{minorPlotPrompts}\n" +
+                $"Player: {combinedPlayerMessage}\n" +
+                "Respond now with the JSON object only.";
 
             Debug.Log($"Sending user message to model:\n{userPayload}");
 
-            storyManager.isInNewLocation = false;
+            //storyManager.isInNewLocation = false;
 
             await foreach (var token in chat.SendAsync(userPayload))
             {
@@ -270,6 +279,8 @@ public class OllamaStoryAgentChat : MonoBehaviour
                     responseText.text = streamingBuffer.ToString();
                 }
             }
+
+            logCreator?.LogPlayerMessage(userPayload);
 
             string fullResponse = streamingBuffer.ToString();
             HandleAssistantFullResponse(fullResponse);
@@ -315,7 +326,7 @@ public class OllamaStoryAgentChat : MonoBehaviour
 
         if (responseText != null) responseText.text = resp.answer ?? "";
 
-        if (!string.IsNullOrWhiteSpace(resp.location))
+       /* if (!string.IsNullOrWhiteSpace(resp.location))
         {
             if (EnumTryParseIgnoreCase(resp.location.Trim(), out Location newLoc))
             {
@@ -329,7 +340,7 @@ public class OllamaStoryAgentChat : MonoBehaviour
             {
                 Debug.LogWarning($"Unknown location string from model: '{resp.location}'");
             }
-        }
+        }*/
 
         /*if (!string.IsNullOrWhiteSpace(resp.storyPhase))
         {
