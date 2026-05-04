@@ -4,11 +4,22 @@ using System.Collections.Generic;
 
 public class StoryManager : MonoBehaviour
 {
+    /// <summary>
+    /// Manages narrative structure by selecting and controlling plot points based on location.
+    ///
+    /// This system filters and selects valid minor and major plot points,
+    /// which are then embedded into LLM prompts to guide story generation.
+    /// </summary>
+
+    // Master lists of all available plot points.
     public List<PlotPoint> allMinorPlotPoints;
     public List<PlotPoint> allMajorPlotPoints;
 
+    // Filtered lists based on current location and phase.
     public List<PlotPoint> validMinorPlotPoints = new List<PlotPoint>();
     public List<PlotPoint> validMajorPlotPoints = new List<PlotPoint>();
+
+    // Final selected plot points used in the current location.
     public List<PlotPoint> chosenMinorPlotPoints = new List<PlotPoint>();
     public List<PlotPoint> chosenMajorPlotPoints = new List<PlotPoint>();
 
@@ -19,6 +30,7 @@ public class StoryManager : MonoBehaviour
     public bool isInNewLocation = false;
     public int messageCount = 0;
 
+    // Number of plot points to select at a time.
     private int minorAmount = 2;
     private int majorAmount = 1;
 
@@ -80,6 +92,8 @@ public class StoryManager : MonoBehaviour
         
     }
 
+    // Filters minor plot points based on current location and phase.
+
     public void UpdateValidMajorPlotPoints()
     {
         validMajorPlotPoints.Clear();
@@ -95,6 +109,8 @@ public class StoryManager : MonoBehaviour
             }
         }
     }
+
+    // Randomly selects plot points from the validated list. 
 
     public void PickMajorPlotPoints()
     {
@@ -115,6 +131,8 @@ public class StoryManager : MonoBehaviour
 
     }
 
+    // Updates location and resets narrative state.
+
     public void SetLocation(Location newLocation)
     {
         if (newLocation != currentLocation)
@@ -132,6 +150,8 @@ public class StoryManager : MonoBehaviour
             PickMinorPlotPoints();
         }
     }
+
+    // Updates story phase, which can influence plot point selection and progression goals.
 
     public void SetStoryPhase(Phase newPhase)
     {

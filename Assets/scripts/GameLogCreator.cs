@@ -5,8 +5,23 @@ using UnityEngine;
 
 public class GameLogCreator : MonoBehaviour
 {
+
+    /// <summary>
+    /// Handles logging of player inputs and LLM responses to a text file.
+    /// 
+    /// This is used for debugging, evaluation, and analysis through ablation.
+    /// Documenting how prompts are constructed and how the model responds over time.
+    /// 
+    /// Each play session generates a timestamped log containing:
+    /// - System configuration (model, prompt)
+    /// - Player inputs
+    /// - LLM responses
+    /// </summary>
+
     private string logFilePath;
     public bool loggingEnabled = true;
+
+    // Creates a new log file for each play session.
 
     public void InitialiseLog(string modelName, string ollamaBaseUrl, string systemPrompt)
     {
@@ -35,6 +50,8 @@ public class GameLogCreator : MonoBehaviour
         Debug.Log($"[LOG] Run log created at:\n{logFilePath}");
     }
 
+    // Appends player input to the log file.
+
     public void LogPlayerMessage(string message)
     {
         if (!loggingEnabled || string.IsNullOrEmpty(logFilePath)) return;
@@ -49,6 +66,8 @@ public class GameLogCreator : MonoBehaviour
 
         File.AppendAllText(logFilePath, entry.ToString());
     }
+
+    // Appends full LLM response to the log file.
 
     public void LogLLMResponse(string response)
     {

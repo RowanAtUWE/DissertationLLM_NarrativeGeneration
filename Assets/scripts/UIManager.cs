@@ -5,6 +5,13 @@ using TMPro;
 using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
+    /// <summary>
+    /// Manages player input mode selection (Do, Say, Ask) through the UI.
+    ///
+    /// This allows the player to define the type of interaction they are making,
+    /// which is then included in the LLM prompt to influence how the storyteller responds.
+    /// </summary>
+
     public Button actionButton;
 
     public Button doButton;

@@ -3,13 +3,18 @@ using System.Collections.Generic;
 
 public class EnviromentalUpdate : MonoBehaviour
 {
+    /// <summary>
+    /// Updates the active environment based on the current story location.
+    /// Each location activates a predefined set of GameObjects while disabling others,
+    /// ensuring only relevant environment elements are visible at any time.
+    /// </summary>
+
     [Header("Environment Objects")]
     public List<GameObject> VillageEnviroment;
     public List<GameObject> ForestEnviroment;
     public List<GameObject> CaveEnviroment;
     public List<GameObject> CastleEnviroment;
 
-    [Header("Story Agent Reference")]
     public OllamaStoryAgentChat storyAgent;
     public StoryManager storyManager;
 

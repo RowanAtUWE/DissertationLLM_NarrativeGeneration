@@ -6,11 +6,26 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using OllamaSharp;
+//Ollamasharp is an external library used to interface with the Ollama API. 
+// It provides access to the Chat class, which manages the conversation history and streaming responses from the model.
 using System.Linq;
 
 public class OllamaStoryAgentChat : MonoBehaviour
 {
-    // --- UI ---
+
+    /// <summary>
+    /// Handles communication between the player and the LLM storyteller agent.
+    /// Integrates UI input, narrative state (StoryManager), and memory systems,
+    /// and sends structured prompts to a locally hosted Ollama model.
+    /// 
+    /// This script is responsible for:
+    /// - Constructing the user payload (memory, location, narrative phase)
+    /// - Streaming responses from the model
+    /// - Parsing structured JSON output into game logic
+    /// </summary>
+
+
+    // UI
     public TMP_InputField playerInputField;
     public TextMeshProUGUI responseText;
     public Button sendButton;
@@ -22,7 +37,7 @@ public class OllamaStoryAgentChat : MonoBehaviour
     public UIManager uiManager;
     //private int messageCount = 0;
 
-    // --- Ollama settings ---
+    // Ollama settings
     [Tooltip("Ollama base address, e.g. http://localhost:11434")]
     public string ollamaBaseUrl = "http://localhost:11434";
 
@@ -30,7 +45,7 @@ public class OllamaStoryAgentChat : MonoBehaviour
     public string modelName = "gemma3:4b";
 
     private OllamaApiClient client;
-    private Chat chat; // persistent chat object that tracks messages / context
+    private Chat chat;
 
 
 
@@ -38,7 +53,8 @@ public class OllamaStoryAgentChat : MonoBehaviour
     private bool isProcessing = false;
     private StringBuilder streamingBuffer = new StringBuilder();
 
-    // System prompt
+    // System prompt defines strict rules for the model's behavior and response format.
+    // It instructs the model to respond with a JSON object containing an answer, location, and memory additions, and provides guidelines for narrative development and pacing.
     private readonly string systemPrompt =
         "You are an in-game storyteller agent. Always respond with a single JSON object (no extra text) with these fields: " +
         "{\"answer\":\"text the player reads\",\"location\":\"one of: Village,Forest,Cave,Castle\", \"addMemory\":\"}." +
@@ -68,11 +84,13 @@ public class OllamaStoryAgentChat : MonoBehaviour
         "\r\n - Ongoing situations / narrative threads" +
         "\r\n - Return memory additions as a list of short strings. If nothing should be added, return an empty list.";
        
-    //"location\":\"one of: Village,Forest,Cave,Castle\"
+    // Old system prompt components.
+    
     // "\r\n- Do not introduce minor or major narrative threads in the beginning phase. Focus on world-building and immersion once the player is engaged and exploring the world transition to the Middle phase." +
     // "\r\n- In the middle phase, start introducing minor narrative threads gradually, building tension and intrigue, but do not force narrative threads to resolve quickly. Once the narrative threads are introduced progress to the End phase." +
     // "\r\n- In the end phase, you can start resolving minor narrative threads and introduce the major narrative thread. The major narrative thread should be the climax of the story and should be resolved slowly to create a satisfactory ending." +
     // "\r\n- After the narrative arc has ended reset the phase to beginning and influence the player to travel to a new location one of:(Village, Forest, Cave, Castle)." +
+
     [Serializable]
     private class StoryResponse
     {
@@ -83,22 +101,43 @@ public class OllamaStoryAgentChat : MonoBehaviour
 
     async void Start()
     {
+
         Debug.Log($"System prompt: " + systemPrompt);
-        if (playerInputField == null) Debug.LogWarning("playerInputField not assigned.");
-        if (responseText == null) Debug.LogWarning("responseText not assigned.");
-        if (sendButton == null) Debug.LogWarning("sendButton not assigned.");
+
+        if (playerInputField == null)
+        {
+            Debug.LogWarning("playerInputField not assigned.");
+        }
+        if (responseText == null)
+        {
+            Debug.LogWarning("responseText not assigned.");
+        }
+        if (sendButton == null)
+        {
+            Debug.LogWarning("sendButton not assigned.");
+        }
+
+        // Initialize Ollama client and persistent chat session.
 
         try
         {
             client = new OllamaApiClient(new Uri(ollamaBaseUrl));
             client.SelectedModel = modelName;
 
+            // Chat object from OllamaSharp library.
             chat = new Chat(client);
 
          
             await AddSystemMessageIfNeeded();
 
-            if (responseText != null) responseText.text = "Storyteller ready.";
+            // send the system prompt as the first message to seed the conversation and set expectations for response format and storytelling style.
+
+            if (responseText != null)
+            {
+                responseText.text = "Storyteller ready.";
+            }
+                
+                
         }
         catch (Exception ex)
         {
@@ -136,7 +175,15 @@ public class OllamaStoryAgentChat : MonoBehaviour
 
     public async void OnSendClicked()
     {
-        if (isProcessing) return;
+
+        // Handles player UI interation.
+        // Prevents multiple simultaneous sends, constructs the user message payload, and manages UI state during processing.
+
+        if (isProcessing)
+        {
+            return;
+        }
+        
 
         string user = playerInputField != null ? playerInputField.text : "";
 
@@ -170,6 +217,8 @@ public class OllamaStoryAgentChat : MonoBehaviour
         {
             storyManager.messageCount++;
 
+            // Progress narrative phase based on memory accumulation and turn count.
+
             int memoryCount = memoryManager.narrativeMemories.Count;
 
             if (memoryCount >= 5 && storyManager.currentPhase == Phase.Beginning && storyManager.messageCount >= 7)
@@ -184,6 +233,8 @@ public class OllamaStoryAgentChat : MonoBehaviour
             {
                 storyManager.SetStoryPhase(Phase.End);
             }
+
+           
 
             string locationHint = $"CurrentLocation: {storyManager.currentLocation}";
 
@@ -237,26 +288,15 @@ public class OllamaStoryAgentChat : MonoBehaviour
                     break;
             }
 
-            /*if (storyManager.isInNewLocation)
-            {
-                majorPlotPrompts = "Current Major narrative thread (forshadowing):\n" + $" Name: \"{majorName}\"\n" + $" Description: \"{majorDesc}\"";
-                minorPlotPrompts = $"Current Minor narrative thread names: {string.Join(", ", minorPlotNames)}\n" + $"the descriptions of the minor threads are {string.Join(", ", minorPlotDesc)}";
-            }
-            else if (!storyManager.isInNewLocation)
-            {
-                majorPlotPrompts = "Current Major narrative thread (forshadowing):\n" + $" Name: \"{majorName}\"\n";
-                minorPlotPrompts = $"Current Minor narrative thread names: {string.Join(", ", minorPlotNames)}";
-            }*/
-
             string storyphase = $"Current story phase: {storyManager.currentPhase}";
 
             string playerAction = uiManager.actionButtonText.text;
 
             string combinedPlayerMessage = $"{playerAction}" + $"{userMessage}";
 
-            //Debug.Log($"Major prompt: {majorPlotPrompts}\nMinor names: {string.Join(", ", minorPlotNames)}\nMinor descriptions: {string.Join(" | ", minorPlotDesc)}");
 
-            // Combine the player's message with a short instruction to respond with JSON:
+            // Construct the user payload with memory, location, narrative phase, and player message. This structured prompt provides the model with all necessary context to generate a coherent and relevant response.
+
             string userPayload = 
                 $"{memoryManager.BuildMemoryPrompt()}\n" +
                 $"{locationHint}\n" +
@@ -268,8 +308,6 @@ public class OllamaStoryAgentChat : MonoBehaviour
 
             Debug.Log($"Sending user message to model:\n{userPayload}");
 
-            //storyManager.isInNewLocation = false;
-
             await foreach (var token in chat.SendAsync(userPayload))
             {
                 streamingBuffer.Append(token);
@@ -279,6 +317,9 @@ public class OllamaStoryAgentChat : MonoBehaviour
                     responseText.text = streamingBuffer.ToString();
                 }
             }
+
+            // Stream response token-by-token (OllamaSharp feature)
+            // Log player message and full model reponse for debugging and analysis of narrative development and model behavior.
 
             logCreator?.LogPlayerMessage(userPayload);
 
@@ -295,6 +336,9 @@ public class OllamaStoryAgentChat : MonoBehaviour
 
     private void HandleAssistantFullResponse(string fullText)
     {
+
+        // After the full response is received, attempt to extract the JSON object and parse it into structured data for game logic.
+
         Debug.Log($"RAW assistant response:\n{fullText}");
 
         string json = ExtractFirstJsonObject(fullText);
@@ -326,13 +370,12 @@ public class OllamaStoryAgentChat : MonoBehaviour
 
         if (responseText != null) responseText.text = resp.answer ?? "";
 
-       /* if (!string.IsNullOrWhiteSpace(resp.location))
+        if (!string.IsNullOrWhiteSpace(resp.location))
         {
             if (EnumTryParseIgnoreCase(resp.location.Trim(), out Location newLoc))
             {
                 if (newLoc != storyManager.currentLocation)
                 {
-                    //storyManager.currentLocation = newLoc;
                     storyManager.SetLocation(newLoc);
                 }
             }
@@ -340,7 +383,9 @@ public class OllamaStoryAgentChat : MonoBehaviour
             {
                 Debug.LogWarning($"Unknown location string from model: '{resp.location}'");
             }
-        }*/
+        }
+
+        // Old function for dynamic story phase changes based on model output.
 
         /*if (!string.IsNullOrWhiteSpace(resp.storyPhase))
         {
@@ -349,10 +394,11 @@ public class OllamaStoryAgentChat : MonoBehaviour
                 storyManager.SetStoryPhase(phase);
             }
             else
-            {
                 Debug.LogWarning($"Unknown story phase string from model: '{resp.storyPhase}'");
             }
         }*/
+
+        // Parse any new memories from the reponse to the memory manager for validating. 
 
         if (resp.addMemory != null)
         {
