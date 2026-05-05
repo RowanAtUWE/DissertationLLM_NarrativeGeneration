@@ -78,7 +78,7 @@ public class OllamaStoryAgentChat : MonoBehaviour
         "\r\n- In the end phase resolve any remaining narrative threads before urging the player to explore a new location." + 
         "\r\n Memory Rules: "  +
         "\r\n- Always use 'addMemory' to return memory additions" +
-        //"\r\n- Memories must be less than 50 characters long and concise." +
+        "\r\n- All memory additions must be short and concise." +
         "\r\n- You may only store 10 memories at a time, ensure memories fall under set categories:" +
         "\r\n - Important persistent facts about the world" +
         "\r\n - Ongoing situations / narrative threads" +

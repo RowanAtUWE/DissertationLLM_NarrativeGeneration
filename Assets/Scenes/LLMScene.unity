@@ -12173,7 +12173,7 @@ MonoBehaviour:
   validMajorPlotPoints: []
   chosenMinorPlotPoints: []
   chosenMajorPlotPoints: []
-  currentLocation: 0
+  currentLocation: 2
   currentPhase: 0
   isInNewLocation: 0
   messageCount: 0
